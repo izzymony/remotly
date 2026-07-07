@@ -48,6 +48,7 @@ export interface JobSearchResponse {
   totalPages: number;
   providers: JobProvider[];
   errors: string[];
+  companyLogoUrl:string;
   query: {
     q?: string;
     location?: string;
