@@ -18,7 +18,8 @@ export function ApplySidebar({
   onClose,
   variant = "inline",
 }: {
-  job: Job | JobListing ;
+  job: 
+   JobListing ;
   applied?: boolean;
   onApply?: () => void;
   onSave?: () => void;
