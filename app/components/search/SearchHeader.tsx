@@ -29,13 +29,14 @@ export function SearchHeader({
             onChange={(e) => setQuery(e.target.value)}
           />
           {query && (
-            <button onClick={clearQuery}>
+            <button onClick={clearQuery} aria-label="Clear search">
               <X size={13} className="text-[#9CA3AF]" />
             </button>
           )}
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
+          aria-label="Toggle filters"
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
             showFilters || activeFilterCount > 0
               ? "bg-[#F05A22] text-white border-[#F05A22]"

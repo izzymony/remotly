@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface CompanyLogoProps {
   /** URL of the company logo image (optional — falls back to coloured initials). */
@@ -74,7 +75,7 @@ const CompanyLogo = ({ companyLogoUrl, companyName, brandColor, size = 40, compa
           </span>
         </div>
       ) : (
-        <img
+        <Image
           src={resolvedLogoUrl as string}
           alt={`${resolvedName ?? 'Company'} logo`}
           width={size}

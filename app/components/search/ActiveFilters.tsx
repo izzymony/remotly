@@ -46,8 +46,9 @@ export function ActiveFilters({
       {remoteOnly && (
         <span className="flex items-center gap-1 px-3 py-1 bg-[#FFF3EE] text-[#F05A22] text-xs rounded-full font-medium">
           Remote only
-          <button
+           <button
             onClick={() => setRemoteOnly(false)}
+            aria-label="Remove Remote only filter"
             className="ml-1"
           >
             <X size={9} />
@@ -61,17 +62,18 @@ export function ActiveFilters({
             className="flex items-center gap-1 px-3 py-1 bg-[#FFF3EE] text-[#F05A22] text-xs rounded-full font-medium"
           >
             {f}
-            <button
-              onClick={() => {
-                if (selectedTypes.includes(f))
-                  toggleFilter(selectedTypes, setSelectedTypes, f);
-                if (selectedLevels.includes(f))
-                  toggleFilter(selectedLevels, setSelectedLevels, f);
-                if (selectedCategories.includes(f))
-                  toggleFilter(selectedCategories, setSelectedCategories, f);
-              }}
-              className="ml-1"
-            >
+               <button
+                 onClick={() => {
+                   if (selectedTypes.includes(f))
+                     toggleFilter(selectedTypes, setSelectedTypes, f);
+                   if (selectedLevels.includes(f))
+                     toggleFilter(selectedLevels, setSelectedLevels, f);
+                   if (selectedCategories.includes(f))
+                     toggleFilter(selectedCategories, setSelectedCategories, f);
+                 }}
+                 aria-label={`Remove ${f} filter`}
+                 className="ml-1"
+               >
               <X size={9} />
             </button>
           </span>

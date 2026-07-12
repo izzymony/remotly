@@ -1,6 +1,5 @@
 "use client";
 import React from 'react'
-import { motion } from "framer-motion";
 import type { JobListing } from "@/types/jobs";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -72,11 +71,8 @@ export function JobCard({
         const jobId = typeof job.id === 'string' ? parseInt(job.id) : job.id;
         const isSaved = savedJobs.has(jobId);
         return (
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileHover={{ y: -4, transition: { duration: 0.2 } }}
-          className="bg-white rounded-[20px] p-5 border border-[#EAEAEA] cursor-pointer group transition-all hover:shadow-xl hover:shadow-orange-100/50 hover:border-orange-200 flex flex-col"
+        <div
+          className="bg-white rounded-[20px] p-5 border border-[#EAEAEA] cursor-pointer group transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-100/50 hover:border-orange-200 flex flex-col"
           key={job.id}
           onClick={() => onSelect?.(job)}
         >
@@ -102,6 +98,7 @@ export function JobCard({
                 e.stopPropagation();
                 if (onSave && jobId) onSave(jobId);
               }}
+              aria-label={isSaved ? "Unsave job" : "Save job"}
               className="p-2 rounded-xl hover:bg-gray-50 transition-colors flex-shrink-0"
             >
               <Bookmark size={18} className={isSaved ? "text-[#F05A22] fill-[#F05A22]" : "text-[#9CA3AF] group-hover:text-[#6B7280]"} />
@@ -133,7 +130,7 @@ export function JobCard({
               </span>
             </div>
           </div>
-        </motion.div>
+        </div>
         );
       })}
     </div>

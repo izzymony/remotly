@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import { motion } from "framer-motion";
 import { ExternalLink, X, Bookmark, MapPin, DollarSign, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import CompanyLogo from "@/app/components/shared/CompanyLogo";
 import { type JobListing } from "@/types/jobs";
@@ -37,10 +36,7 @@ export function ApplySidebar({
     : description;
 
   return (
-    <motion.div
-
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
+    <div
       className={`h-full flex flex-col bg-white ${isOverlay ? "" : "rounded-[24px] border border-[#EAEAEA] shadow-sm"}`}
     >
       <div className={`flex-shrink-0  ${isOverlay ? "p-5 border-b border-gray-100" : "p-6 pb-4 border-b border-[#F5F5F5]"}`}>
@@ -60,8 +56,8 @@ export function ApplySidebar({
               <p className="text-[#6B7280] text-sm font-medium">{job.company}</p>
             </div>
           </div>
-          {onClose && (
-            <button onClick={onClose} className="p-2 rounded-xl hover:bg-gray-50 transition-colors">
+           {onClose && (
+            <button onClick={onClose} aria-label="Close" className="p-2 rounded-xl hover:bg-gray-50 transition-colors">
               <X size={18} className="text-[#9CA3AF]" />
             </button>
           )}
@@ -104,15 +100,15 @@ export function ApplySidebar({
           <h4 className="text-black font-bold text-base">Job Details</h4>
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1">Job Type</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#6B7280] font-semibold mb-1">Job Type</p>
               <p className="text-sm font-medium text-[#111111]">{job.employmentType || "Full-time"}</p>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
-              <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1">Source</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#6B7280] font-semibold mb-1">Source</p>
               <p className="text-sm font-medium text-[#111111] capitalize">{job.provider}</p>
             </div>
             <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 col-span-2">
-              <p className="text-[10px] uppercase tracking-wider text-[#9CA3AF] font-semibold mb-1">Location</p>
+              <p className="text-[10px] uppercase tracking-wider text-[#6B7280] font-semibold mb-1">Location</p>
               <p className="text-sm font-medium text-[#111111]">{job.location}</p>
             </div>
           </div>
@@ -162,6 +158,6 @@ export function ApplySidebar({
         </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

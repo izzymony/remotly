@@ -67,6 +67,7 @@ export function Nav() {
         <div className="flex items-center gap-2">
           <Link
             href="/saved"
+            aria-label="Saved jobs"
             className={`relative p-2 rounded-xl hover:bg-white transition-colors block ${
               pathname === "/saved" ? "text-[#F05A22]" : "text-[#6B7280]"
             }`}
@@ -78,7 +79,7 @@ export function Nav() {
               </span>
             )}
           </Link>
-          <button className="p-2 rounded-xl hover:bg-white transition-colors">
+          <button aria-label="Notifications" className="p-2 rounded-xl hover:bg-white transition-colors">
             <Bell size={20} className="text-[#6B7280]" />
           </button>
           <Link
@@ -88,6 +89,7 @@ export function Nav() {
             A
           </Link>
           <button
+            aria-label="Open menu"
             className="md:hidden p-2 rounded-xl hover:bg-white transition-colors"
             onClick={() => setMenuOpen(!menuOpen)}
           >

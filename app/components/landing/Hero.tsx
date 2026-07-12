@@ -147,7 +147,7 @@ export function Hero() {
           transition={{ delay: 0.3 }}
           className="mt-5 flex items-center gap-3 flex-wrap justify-center"
         >
-          <span className="text-sm text-[#9CA3AF]">Trending:</span>
+          <span className="text-sm text-[#6B7280]">Trending:</span>
           {TRENDING.map((t) => (
             <button
               key={t}
