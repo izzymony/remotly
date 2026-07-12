@@ -5,13 +5,17 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowUpRight, Building2, MapPin, Briefcase } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
-export function CompanyCard() {
+interface CompanyCardProps {
+  companies?: any[];
+}
+
+export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
   const [followed, setFollowed] = useState<Record<string, boolean>>({});
 
-  const { data, isLoading, error } = useQuery({
+  const { data: fetchedData, isLoading, error } = useQuery({
     queryKey: ["companies"],
+    enabled: !passedCompanies,
     queryFn: async () => {
       const res = await fetch("/api/companies", { cache: "no-store" });
       if (!res.ok) {
@@ -26,16 +30,18 @@ export function CompanyCard() {
     },
   });
 
-  if (isLoading) return (
+  if (!passedCompanies && isLoading) return (
     <div className="flex h-48 w-full items-center justify-center">
       <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#F05A22] border-t-transparent" />
     </div>
   );
-  if (error) return <div className="p-4 text-sm text-red-500">Error loading companies</div>;
+  if (!passedCompanies && error) return <div className="p-4 text-sm text-red-500">Error loading companies</div>;
+
+  const data = passedCompanies ?? fetchedData;
 
   return (
     <div className="grid px-8 mt-6 gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {data?.map((company: Record<string, unknown>, index: number) => {
+      {data?.map((company: Record<string, any>, index: number) => {
         const companyId = String(company.company_id || company.id || company.name || `company-${index}`);
         const isFollowing = Boolean(followed[companyId]);
         const logoValue = typeof company.logo_url === "string"
@@ -45,9 +51,11 @@ export function CompanyCard() {
             : "";
         const hasValidImageUrl = (() => {
           if (!logoValue) return false;
+          if (typeof logoValue !== "string") return false;
+          if (logoValue.startsWith("#")) return false;
           try {
-            new URL(logoValue);
-            return true;
+            const parsed = new URL(logoValue);
+            return parsed.protocol === "http:" || parsed.protocol === "https:";
           } catch {
             return false;
           }
@@ -68,7 +76,7 @@ export function CompanyCard() {
             <div className="relative z-10 flex items-start justify-between">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 shadow-sm">
                 {hasValidImageUrl ? (
-                  <Image
+                  <img
                     src={logoValue}
                     alt={String(company.name || "Company logo")}
                     width={56}
@@ -76,7 +84,7 @@ export function CompanyCard() {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F05A22] to-orange-400 text-lg font-bold text-white">
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F05A22] to-orange-400 text-lg font-bold text-white" style={{ backgroundColor: typeof company.logo === 'string' && company.logo.startsWith('#') ? company.logo : undefined }}>
                     {String(company.name || "C").charAt(0).toUpperCase()}
                   </div>
                 )}
@@ -84,23 +92,24 @@ export function CompanyCard() {
               
               <button
                 type="button"
-                onClick={() => setFollowed((current) => ({ ...current, [companyId]: !current[companyId] }))}
-                className={`flex h-8 items-center justify-center rounded-full px-4 text-xs font-semibold tracking-wide transition-all duration-300 ${
-                  isFollowing
-                    ? "bg-gray-900 text-white shadow-md hover:bg-gray-800"
-                    : "border border-gray-200 bg-white text-gray-700 hover:border-[#F05A22] hover:bg-orange-50 hover:text-[#F05A22]"
-                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setFollowed((current) => ({ ...current, [companyId]: !current[companyId] }));
+                }}
+                className="flex h-8 items-center justify-center rounded-full px-4 text-xs font-semibold tracking-wide transition-all duration-300 border border-gray-200 bg-white text-gray-700 hover:border-[#F05A22] hover:bg-orange-50 hover:text-[#F05A22]"
               >
                 {isFollowing ? "Following" : "Follow"}
               </button>
             </div>
 
             <div className="relative z-10 mt-5">
-              <h3 className="mb-1 text-lg font-bold tracking-tight text-gray-900 transition-colors group-hover:text-[#F05A22]">
-                {String(company.name ?? "")}
-              </h3>
+              <Link href={`/companies/${companyId}`} className="block">
+                <h3 className="mb-1 text-lg font-bold tracking-tight text-gray-900 transition-colors group-hover:text-[#F05A22]">
+                  {String(company.name ?? "")}
+                </h3>
+              </Link>
               <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">
-                {String(company.description || "Explore opportunities with this team and discover what it's like to work here.")}
+                {String(company.description || company.tagline || "Explore opportunities with this team and discover what it's like to work here.")}
               </p>
             </div>
 
@@ -129,9 +138,7 @@ export function CompanyCard() {
                 </span>
               </div>
               <Link
-                href={String(company.company_url || company.website || company.url || "#")}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/companies/${companyId}`}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 transition-all hover:bg-[#F05A22] hover:text-white"
               >
                 <ArrowUpRight size={16} strokeWidth={2.5} />

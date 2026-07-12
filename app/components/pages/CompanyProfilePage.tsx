@@ -6,14 +6,12 @@ import { JOBS } from "@/app/data/jobs";
 import { COMPANIES } from "@/app/data/companies";
 import CompanyLogo  from "@/app/components/shared/CompanyLogo";
 
+import Link from "next/link";
+
 export function CompanyProfilePage({
   company,
-  setPage,
-  setSelectedJob,
 }: {
   company: any;
-  setPage: (p: string) => void;
-  setSelectedJob: (j: any) => void;
 }) {
   const [followed, setFollowed] = useState(false);
   const companyJobs = JOBS.filter((j) => j.companyId === company.id);
@@ -118,13 +116,10 @@ export function CompanyProfilePage({
               {companyJobs.length > 0 ? (
                 <div className="space-y-3">
                   {companyJobs.map((job) => (
-                    <button
+                    <Link
                       key={job.id}
-                      onClick={() => {
-                        setSelectedJob(job);
-                        setPage("job");
-                      }}
-                      className="w-full flex items-center justify-between p-4 rounded-xl border border-[#EAEAEA] hover:border-[#F05A22] hover:bg-[#FFFFFF] transition-all text-left group"
+                      href={`/jobs/${job.id}`}
+                      className="w-full flex items-center justify-between p-4 rounded-xl border border-[#EAEAEA] hover:border-[#F05A22] hover:bg-[#FFFFFF] transition-all text-left group block"
                     >
                       <div>
                         <p className="font-semibold text-[#111111] text-sm group-hover:text-[#F05A22] transition-colors">
@@ -135,7 +130,7 @@ export function CompanyProfilePage({
                         </p>
                       </div>
                       <ArrowRight size={15} className="text-[#F05A22] group-hover:translate-x-0.5 transition-transform" />
-                    </button>
+                    </Link>
                   ))}
                 </div>
               ) : (

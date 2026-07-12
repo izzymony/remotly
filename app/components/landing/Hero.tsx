@@ -1,26 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, MapPin, X, Sparkles } from "lucide-react";
 import { TRENDING, RECENT_SEARCHES } from "@/app/data/constants";
 
-export function Hero({
-  setPage,
-  onSearch,
-}: {
-  setPage: (p: string) => void;
-  onSearch?: (query: string, location: string) => void;
-}) {
+export function Hero() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [location, setLocation] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const handleSearch = () => {
-    setPage("search");
-    if (onSearch) {
-      onSearch(searchQuery, location);
-    }
+    const params = new URLSearchParams();
+    if (searchQuery) params.set("q", searchQuery);
+    if (location) params.set("location", location);
+    router.push(`/jobs?${params.toString()}`);
   };
 
   return (
@@ -155,7 +151,7 @@ export function Hero({
           {TRENDING.map((t) => (
             <button
               key={t}
-              onClick={() => setPage("search")}
+              onClick={() => router.push(`/jobs?q=${encodeURIComponent(t)}`)}
               className="text-sm text-[#6B7280] hover:text-[#F05A22] transition-colors underline underline-offset-2 decoration-[#EAEAEA]"
             >
               {t}

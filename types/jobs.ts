@@ -23,9 +23,9 @@ export interface JobListing {
   location: string;
   description: string;
   
-  url: string;
-  jobType:string;
-  rating: number; 
+  url?: string;
+  jobType?: string;
+  rating?: number; 
   provider: JobProvider;
   postedAt?: string;
   companyLogoUrl?: string;
@@ -48,7 +48,6 @@ export interface JobSearchResponse {
   totalPages: number;
   providers: JobProvider[];
   errors: string[];
-  companyLogoUrl:string;
   query: {
     q?: string;
     location?: string;

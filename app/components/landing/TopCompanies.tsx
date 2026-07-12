@@ -1,16 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { COMPANIES } from "@/app/data/companies";
 import { CompanyCard } from "@/app/components/shared/CompanyCard";
 
-export function TopCompanies({
-  setPage,
-  setSelectedCompany,
-}: {
-  setPage: (p: string) => void;
-  setSelectedCompany: (c: any) => void;
-}) {
+export function TopCompanies() {
   const topCompanies = COMPANIES.slice(0, 6);
 
   return (
@@ -23,26 +18,15 @@ export function TopCompanies({
             </h2>
             <p className="text-[#6B7280]">Join world-class teams at the most innovative companies.</p>
           </div>
-          <button
-            onClick={() => setPage("companies")}
+          <Link
+            href="/companies"
             className="hidden md:flex items-center gap-2 text-sm font-semibold text-[#F05A22]"
           >
             All companies <ArrowRight size={15} />
-          </button>
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {topCompanies.map((company) => (
-            <CompanyCard
-              key={company.id}
-              company={company}
-              onClick={() => {
-                setSelectedCompany(company);
-                setPage("company");
-              }}
-            />
-          ))}
-        </div>
+        <CompanyCard companies={topCompanies} />
       </div>
     </section>
   );

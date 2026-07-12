@@ -1,23 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, X, Bookmark } from "lucide-react";
 import { JOBS } from "@/app/data/jobs";
-import { COMPANIES } from "@/app/data/companies";
 import { JobCard } from "@/app/components/shared/JobCard";
+import { useSavedJobs } from "@/app/components/provider";
 
-export function SavedJobsPage({
-  savedJobs,
-  onSave,
-  setPage,
-  setSelectedJob,
-}: {
-  savedJobs: Set<number>;
-  onSave: (id: number) => void;
-  setPage: (p: string) => void;
-  setSelectedJob: (j: any) => void;
-}) {
+export function SavedJobsPage() {
+  const router = useRouter();
+  const { savedJobs, toggleSaveJob } = useSavedJobs();
   const [searchQuery, setSearchQuery] = useState("");
+
   const savedJobsList = JOBS.filter((j) => savedJobs.has(j.id));
   const filtered = savedJobsList.filter(
     (j) =>
@@ -25,6 +20,19 @@ export function SavedJobsPage({
       j.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       j.company.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const jobListings = filtered.map((j) => ({
+    id: String(j.id),
+    title: j.title,
+    company: j.company,
+    location: j.location,
+    description: j.description,
+    salary: j.salary,
+    employmentType: j.type,
+    postedAt: j.posted,
+    remote: j.remote,
+    provider: "indeed" as const,
+  }));
 
   return (
     <div className="pt-16 min-h-screen bg-[#FFFFFF]">
@@ -39,12 +47,12 @@ export function SavedJobsPage({
               {savedJobsList.length !== 1 ? "s" : ""}
             </p>
           </div>
-          <button
-            onClick={() => setPage("search")}
-            className="bg-[#F05A22] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#D94E1A] transition-colors shadow-sm"
+          <Link
+            href="/jobs"
+            className="bg-[#F05A22] text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[#D94E1A] transition-colors shadow-sm inline-block"
           >
             Find More Jobs
-          </button>
+          </Link>
         </div>
 
         <div className="bg-white rounded-[20px] border border-[#EAEAEA] flex items-center gap-2 px-4 py-3 mb-6">
@@ -76,33 +84,21 @@ export function SavedJobsPage({
                 : "Start exploring and save roles you're interested in."}
             </p>
             {!searchQuery && (
-              <button
-                onClick={() => setPage("search")}
-                className="bg-[#F05A22] text-white px-7 py-3 rounded-xl font-semibold hover:bg-[#D94E1A] transition-colors"
+              <Link
+                href="/jobs"
+                className="bg-[#F05A22] text-white px-7 py-3 rounded-xl font-semibold hover:bg-[#D94E1A] transition-colors inline-block"
               >
                 Explore Jobs
-              </button>
+              </Link>
             )}
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {filtered.map((job) => {
-              const company = COMPANIES.find((c) => c.id === job.companyId)!;
-              return (
-                <JobCard
-                  key={job.id}
-                  job={job}
-                  company={company}
-                  isSaved={true}
-                  onSave={onSave}
-                  onClick={() => {
-                    setSelectedJob(job);
-                    setPage("job");
-                  }}
-                />
-              );
-            })}
-          </div>
+          <JobCard
+            jobs={jobListings}
+            onSelect={(job) => router.push(`/jobs/${job.id}`)}
+            onSave={toggleSaveJob}
+            savedJobs={savedJobs}
+          />
         )}
       </div>
     </div>

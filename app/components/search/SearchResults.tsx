@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { Search as SearchIcon } from "lucide-react";
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
@@ -12,9 +12,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ApplySidebar } from "@/app/components/job/ApplySidebar";
 import CompanyLogo from '@/app/components/shared/CompanyLogo';
 import { type JobListing } from '@/types/jobs';
+import { useSavedJobs } from '@/app/components/provider';
 
-export function SearchResults() {
+
+export function SearchResults({ 
+  query = "", 
+  location = "",
+  remoteOnly = false,
+  selectedTypes = [],
+  selectedCategories = []
+}: { 
+  query?: string; 
+  location?: string;
+  remoteOnly?: boolean;
+  selectedTypes?: string[];
+  selectedCategories?: string[];
+}) {
   const [selectedJob, setSelectedJob] = useState<JobListing | null>(null);
+  const { savedJobs, toggleSaveJob } = useSavedJobs();
 
   const {
     data,
@@ -24,9 +39,12 @@ export function SearchResults() {
     fetchNextPage,
     isFetchingNextPage
   } = useInfiniteQuery({
-    queryKey: ['jobs-infinite-20'],
+    queryKey: ['jobs-infinite-20', query, location],
     queryFn: async ({ pageParam = 1 }) => {
-      const res = await fetch(`/api/jobs?page=${pageParam}&limit=20`);
+      let url = `/api/jobs?page=${pageParam}&limit=20`;
+      if (query) url += `&q=${encodeURIComponent(query)}`;
+      if (location) url += `&location=${encodeURIComponent(location)}`;
+      const res = await fetch(url);
 
       if (!res.ok) {
         throw new Error('failed to fetch jobs from API');
@@ -48,7 +66,16 @@ export function SearchResults() {
     initialPageParam: 1,
   });
 
-  const listings = data?.pages.flatMap((page) => page.jobs) || [];
+  const rawListings = data?.pages.flatMap((page) => page.jobs) || [];
+  
+  const listings = useMemo(() => {
+    return rawListings.filter((job) => {
+      if (remoteOnly && !job.remote) return false;
+      if (selectedTypes.length && !selectedTypes.includes(job.employmentType || "Full-time")) return false;
+      if (selectedCategories.length && !selectedCategories.includes(job.category || "")) return false;
+      return true;
+    });
+  }, [rawListings, remoteOnly, selectedTypes, selectedCategories]);
 
   const handleCardClick = (job: JobListing) => {
     setSelectedJob(job);
@@ -144,9 +171,21 @@ export function SearchResults() {
                           <p className="text-[#6B7280] text-sm font-medium">{job.company}</p>
                         </div>
                       </div>
-                      <button className="p-2 rounded-xl hover:bg-gray-50 transition-colors flex-shrink-0">
-                        <Bookmark size={18} className="text-[#9CA3AF] group-hover:text-[#6B7280]" />
-                      </button>
+                      {(() => {
+                        const jobId = typeof job.id === 'string' ? parseInt(job.id) : job.id;
+                        const isSaved = savedJobs.has(jobId);
+                        return (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (jobId) toggleSaveJob(jobId);
+                            }}
+                            className="p-2 rounded-xl hover:bg-gray-50 transition-colors flex-shrink-0"
+                          >
+                            <Bookmark size={18} className={isSaved ? "text-[#F05A22] fill-[#F05A22]" : "text-[#9CA3AF] group-hover:text-[#6B7280]"} />
+                          </button>
+                        );
+                      })()}
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-4">

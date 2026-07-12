@@ -16,15 +16,11 @@ import { JOBS } from "@/app/data/jobs";
 import { COMPANIES } from "@/app/data/companies";
 import CompanyLogo  from "@/app/components/shared/CompanyLogo";
 
-export function DashboardPage({
-  savedJobs,
-  setPage,
-  setSelectedJob,
-}: {
-  savedJobs: Set<number>;
-  setPage: (p: string) => void;
-  setSelectedJob: (j: any) => void;
-}) {
+import Link from "next/link";
+import { useSavedJobs } from "@/app/components/provider";
+
+export function DashboardPage() {
+  const { savedJobs } = useSavedJobs();
   const savedJobsList = JOBS.filter((j) => savedJobs.has(j.id));
   const recommendedJobs = JOBS.filter((j) => !savedJobs.has(j.id) && j.featured).slice(0, 4);
 
@@ -47,12 +43,12 @@ export function DashboardPage({
               Here&apos;s your job search overview.
             </p>
           </div>
-          <button
-            onClick={() => setPage("search")}
-            className="bg-[#F05A22] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#D94E1A] transition-colors text-sm shadow-md shadow-orange-200/50"
+          <Link
+            href="/jobs"
+            className="bg-[#F05A22] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#D94E1A] transition-colors text-sm shadow-md shadow-orange-200/50 inline-block"
           >
             Find Jobs
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
@@ -124,40 +120,39 @@ export function DashboardPage({
               <h2 className="font-bold text-[#111111]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
                 Saved Jobs
               </h2>
-              <button onClick={() => setPage("saved")} className="text-sm text-[#F05A22] hover:underline font-medium">
+              <Link href="/saved" className="text-sm text-[#F05A22] hover:underline font-medium">
                 View all
-              </button>
+              </Link>
             </div>
             {savedJobsList.length === 0 ? (
               <div className="text-center py-8">
                 <Bookmark size={22} className="mx-auto mb-2 text-[#EAEAEA]" />
                 <p className="text-sm text-[#6B7280]">No saved jobs yet</p>
-                <button onClick={() => setPage("search")} className="mt-3 text-sm text-[#F05A22] hover:underline">
+                <Link href="/jobs" className="mt-3 text-sm text-[#F05A22] hover:underline inline-block">
                   Explore Jobs
-                </button>
+                </Link>
               </div>
             ) : (
               <div className="space-y-2">
                 {savedJobsList.slice(0, 4).map((job) => {
                   const company = COMPANIES.find((c) => c.id === job.companyId)!;
                   return (
-                    <button
+                    <Link
                       key={job.id}
-                      onClick={() => {
-                        setSelectedJob(job);
-                        setPage("job");
-                      }}
-                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#FFFFFF] transition-colors text-left group"
+                      href={`/jobs/${job.id}`}
+                      className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#FFFFFF] transition-colors text-left group block"
                     >
-                      <CompanyLogo company={company} size={38} />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-[#111111] text-sm truncate group-hover:text-[#F05A22] transition-colors">
-                          {job.title}
-                        </p>
-                        <p className="text-xs text-[#6B7280]">{job.company} · {job.salary}</p>
+                      <div className="flex items-center gap-3 w-full">
+                        <CompanyLogo company={company} size={38} />
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-[#111111] text-sm truncate group-hover:text-[#F05A22] transition-colors">
+                            {job.title}
+                          </p>
+                          <p className="text-xs text-[#6B7280]">{job.company} · {job.salary}</p>
+                        </div>
+                        <ChevronRight size={13} className="text-[#9CA3AF] flex-shrink-0" />
                       </div>
-                      <ChevronRight size={13} className="text-[#9CA3AF] flex-shrink-0" />
-                    </button>
+                    </Link>
                   );
                 })}
               </div>
@@ -169,33 +164,32 @@ export function DashboardPage({
               <h2 className="font-bold text-[#111111]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
                 Recommended for you
               </h2>
-              <button onClick={() => setPage("search")} className="text-sm text-[#F05A22] hover:underline font-medium">
+              <Link href="/jobs" className="text-sm text-[#F05A22] hover:underline font-medium">
                 Explore
-              </button>
+              </Link>
             </div>
             <div className="space-y-2">
               {recommendedJobs.map((job) => {
                 const company = COMPANIES.find((c) => c.id === job.companyId)!;
                 return (
-                  <button
+                  <Link
                     key={job.id}
-                    onClick={() => {
-                      setSelectedJob(job);
-                      setPage("job");
-                    }}
-                    className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#FFFFFF] transition-colors text-left group"
+                    href={`/jobs/${job.id}`}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#FFFFFF] transition-colors text-left group block"
                   >
-                    <CompanyLogo company={company} size={38} />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-[#111111] text-sm truncate group-hover:text-[#F05A22] transition-colors">
-                        {job.title}
-                      </p>
-                      <p className="text-xs text-[#6B7280]">{job.company} · {job.salary}</p>
+                    <div className="flex items-center gap-3 w-full">
+                      <CompanyLogo company={company} size={38} />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-[#111111] text-sm truncate group-hover:text-[#F05A22] transition-colors">
+                          {job.title}
+                        </p>
+                        <p className="text-xs text-[#6B7280]">{job.company} · {job.salary}</p>
+                      </div>
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-[#F05A22] bg-[#FFF3EE] px-2 py-1 rounded-full flex-shrink-0">
+                        <Sparkles size={9} /> Match
+                      </span>
                     </div>
-                    <span className="flex items-center gap-1 text-[10px] font-bold text-[#F05A22] bg-[#FFF3EE] px-2 py-1 rounded-full flex-shrink-0">
-                      <Sparkles size={9} /> Match
-                    </span>
-                  </button>
+                  </Link>
                 );
               })}
             </div>
@@ -208,14 +202,16 @@ export function DashboardPage({
             <div className="space-y-1">
               {["Senior React Engineer", "Product Designer Remote", "ML Engineer SF", "Engineering Manager"].map(
                 (search) => (
-                  <button
+                  <Link
                     key={search}
-                    onClick={() => setPage("search")}
-                    className="w-full flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-[#FFFFFF] transition-colors text-left text-sm text-[#6B7280] hover:text-[#111111]"
+                    href={`/jobs?q=${encodeURIComponent(search)}`}
+                    className="w-full flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-[#FFFFFF] transition-colors text-left text-sm text-[#6B7280] hover:text-[#111111] block"
                   >
-                    <Clock size={13} className="text-[#9CA3AF]" />
-                    {search}
-                  </button>
+                    <div className="flex items-center gap-2.5">
+                      <Clock size={13} className="text-[#9CA3AF]" />
+                      {search}
+                    </div>
+                  </Link>
                 )
               )}
             </div>

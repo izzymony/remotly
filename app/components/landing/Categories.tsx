@@ -1,9 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Code2, Palette, TrendingUp, Layers, Database, Cpu } from "lucide-react";
 import { CATEGORIES } from "@/app/data/categories";
 
-export function Categories({ setPage }: { setPage: (p: string) => void }) {
+export function Categories() {
+  const router = useRouter();
   const iconMap: Record<string, React.ReactNode> = {
     Engineering: <Code2 size={20} />,
     Design: <Palette size={20} />,
@@ -27,7 +29,7 @@ export function Categories({ setPage }: { setPage: (p: string) => void }) {
           {CATEGORIES.map((cat) => (
             <button
               key={cat.name}
-              onClick={() => setPage("search")}
+              onClick={() => router.push(`/jobs?category=${encodeURIComponent(cat.name)}`)}
               className="group bg-[#F8F8F8] hover:bg-white border border-[#E8E8E8] rounded-[20px] p-5 text-left transition-all hover:shadow-lg hover:shadow-orange-100/40 hover:border-orange-200"
             >
               <div

@@ -1,8 +1,8 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import Link from "next/link";
 
-export function CTA({ setPage }: { setPage: (p: string) => void }) {
+export function CTA() {
   return (
     <section className="px-5 py-20 bg-[#FFFFFF]">
       <div className="max-w-2xl mx-auto">
@@ -20,18 +20,18 @@ export function CTA({ setPage }: { setPage: (p: string) => void }) {
               Join 850,000+ professionals already using TalentFlow.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
-                onClick={() => setPage("search")}
-                className="bg-white text-[#F05A22] px-8 py-3 rounded-xl font-semibold hover:bg-[#FFFFFF] transition-colors shadow-sm"
+              <Link
+                href="/jobs"
+                className="bg-white text-[#F05A22] px-8 py-3 rounded-xl font-semibold hover:bg-[#FFFFFF] transition-colors shadow-sm inline-block"
               >
                 Explore Jobs
-              </button>
-              <button
-                onClick={() => setPage("companies")}
-                className="border border-white/30 text-white px-8 py-3 rounded-xl font-semibold hover:bg-white/10 transition-colors"
+              </Link>
+              <Link
+                href="/companies"
+                className="border border-white/30 text-white px-8 py-3 rounded-xl font-semibold hover:bg-white/10 transition-colors inline-block"
               >
                 Browse Companies
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import Image from 'next/image';
 
 interface CompanyLogoProps {
   /** URL of the company logo image (optional — falls back to coloured initials). */
@@ -11,6 +10,14 @@ interface CompanyLogoProps {
   brandColor?: string;
   /** Side length in px (renders a square). Defaults to 40. */
   size?: number;
+  /** Optional company object from shared data, used to resolve logo/color data. */
+  company?: {
+    name?: string;
+    logo?: string;
+    logo_url?: string;
+    companyLogoUrl?: string;
+    companyLogo?: string;
+  } | null;
 }
 
 const AVATAR_COLORS = [
@@ -37,12 +44,18 @@ function getColor(name: string): string {
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
-const CompanyLogo = ({ companyLogoUrl, companyName, brandColor, size = 40 }: CompanyLogoProps) => {
+const CompanyLogo = ({ companyLogoUrl, companyName, brandColor, size = 40, company }: CompanyLogoProps) => {
   const [imgError, setImgError] = useState(false);
 
-  const showFallback = !companyLogoUrl || imgError;
-  const initials = getInitials(companyName);
-  const bgColor = brandColor || getColor(companyName ?? '');
+  const resolvedName = companyName || company?.name;
+  const resolvedLogoUrl = companyLogoUrl || company?.companyLogoUrl || company?.companyLogo || company?.logo_url;
+  const resolvedBrandColor = brandColor || (typeof company?.logo === 'string' && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(company.logo) ? company.logo : undefined);
+  const isValidImageUrl = Boolean(
+    resolvedLogoUrl && /^https?:\/\//i.test(resolvedLogoUrl) && !resolvedLogoUrl.startsWith('#')
+  );
+  const showFallback = !isValidImageUrl || imgError;
+  const initials = getInitials(resolvedName);
+  const bgColor = resolvedBrandColor || getColor(resolvedName ?? '');
 
   return (
     <div
@@ -61,9 +74,9 @@ const CompanyLogo = ({ companyLogoUrl, companyName, brandColor, size = 40 }: Com
           </span>
         </div>
       ) : (
-        <Image
-          src={companyLogoUrl}
-          alt={`${companyName} logo`}
+        <img
+          src={resolvedLogoUrl as string}
+          alt={`${resolvedName ?? 'Company'} logo`}
           width={size}
           height={size}
           className="object-contain rounded-xl"

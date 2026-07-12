@@ -1,6 +1,7 @@
 import type { JobListing, JobProvider, JobSearchResponse, ProviderFilter, Companies} from '../types/jobs'
 import { apifyToken, adzunaAppId, adzunaAppKey } from '@/lib/tokens'
 import {supabase} from '@/lib/supabaseClient'
+import { JOBS as fallbackJobs } from '@/app/data/jobs'
 type FetchJobsInput = {
   q?: string;
   location?: string;
@@ -104,14 +105,16 @@ export async function fetchJobsFromProviders(
     }),
   );
   const jobs = results.flatMap((result) => result.jobs);
+  const errors = results.flatMap((result) => (result.error ? [result.error] : []));
+  const fallbackResults = getFallbackJobs(q, location);
+  const fallbackJobsList = jobs.length > 0 ? jobs : fallbackResults;
   const total = Math.max(
     ...results.map((result) => result.total ?? result.jobs.length),
-    jobs.length,
+    fallbackJobsList.length,
   );
-  const errors = results.flatMap((result) => (result.error ? [result.error] : []));
 
   return {
-    jobs,
+    jobs: fallbackJobsList,
     total,
     page,
     limit,
@@ -210,10 +213,10 @@ async function fetchAdzunaJobs({
     };
   }
 
-  const useCountry = country && country !== "us" ? country : "gb"; // Default to gb per user request if not specified or defaults to us
+  const useCountry = country && country !== "us" ? country : "gb";
 
   const url = new URL(
-    `https://api.adzuna.com/v1/api/jobs/${useCountry}/search/${page}?/app_id={client.adzunaAppId}&app_key={client.adzunaAppKey}`,
+    `https://api.adzuna.com/v1/api/jobs/${useCountry}/search/${page}`,
   );
   url.searchParams.set("app_id", appId);
   url.searchParams.set("app_key", appKey);
@@ -270,7 +273,7 @@ async function fetchApifyIndeedJobs({
   page,
   limit,
 }: Required<Pick<FetchJobsInput, "q" | "location" | "country" | "page" | "limit">>): Promise<ProviderFetchResult> {
-  const token = process.env.APIFY_KEY ;
+  const token = process.env.APIFY_TOKEN || process.env.APIFY_KEY;
   
   if (!token) {
     return {
@@ -281,7 +284,7 @@ async function fetchApifyIndeedJobs({
 
   // Fetch from the Apify dataset
   const offset = (page - 1) * limit;
-  const url = new URL(`https://api.apify.com/v2/datasets/nb3mVAwI9zR02H8dZ/items?token=${client.apifyToken}`);
+  const url = new URL("https://api.apify.com/v2/datasets/nb3mVAwI9zR02H8dZ/items");
   url.searchParams.set("token", token);
   url.searchParams.set("limit", String(limit));
   url.searchParams.set("offset", String(offset));
@@ -367,7 +370,7 @@ function normalizeApifyJob(result: ApifyResult): JobListing {
     provider: "indeed",
     rating: result.rating,
     CompanyInfo:result.companyInfo,
-    jobType:result.jobType,
+    jobType: result.jobType && result.jobType.length > 0 ? result.jobType[0] : undefined,
     postedAt: result.postedAt || result.postingDateParsed,
     companyLogoUrl: result.companyInfo?.companyLogo || getCompanyLogoUrl(domain),
     domain,
@@ -385,7 +388,33 @@ function resolveProviders(provider?: ProviderFilter): JobProvider[] {
   return ["adzuna", "indeed"];
 }
 
+function getFallbackJobs(q: string, location: string): JobListing[] {
+  const normalizedQuery = q.toLowerCase();
+  const normalizedLocation = location.toLowerCase();
 
+  return fallbackJobs
+    .filter((job) => {
+      const haystack = `${job.title} ${job.company} ${job.location} ${job.description}`.toLowerCase();
+      const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
+      const matchesLocation = !normalizedLocation || job.location.toLowerCase().includes(normalizedLocation);
+      return matchesQuery && matchesLocation;
+    })
+    .map((job) => ({
+      id: `fallback-${job.id}`,
+      title: job.title,
+      company: job.company,
+      location: job.location,
+      description: job.description,
+      url: `https://example.com/jobs/${job.id}`,
+      provider: "indeed",
+      jobType: job.type,
+      salary: job.salary,
+      postedAt: job.posted,
+      remote: job.remote,
+      category: job.category,
+      employmentType: job.type,
+    }));
+}
 
 async function saveJobsToSupabase(jobs: JobListing[]) {
   if (jobs.length === 0) return;
