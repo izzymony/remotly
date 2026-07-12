@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { ArrowUpRight, Building2, MapPin, Briefcase } from "lucide-react";
 import Link from "next/link";
 
 interface CompanyCardProps {
-  companies?: any[];
+  companies?: unknown[];
 }
 
 export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
@@ -41,7 +42,7 @@ export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
 
   return (
     <div className="grid px-8 mt-6 gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {data?.map((company: Record<string, any>, index: number) => {
+      {data?.map((company: Record<string, unknown>, index: number) => {
         const companyId = String(company.company_id || company.id || company.name || `company-${index}`);
         const isFollowing = Boolean(followed[companyId]);
         const logoValue = typeof company.logo_url === "string"
@@ -76,7 +77,7 @@ export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
             <div className="relative z-10 flex items-start justify-between">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 shadow-sm">
                 {hasValidImageUrl ? (
-                  <img
+                  <Image
                     src={logoValue}
                     alt={String(company.name || "Company logo")}
                     width={56}

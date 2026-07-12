@@ -1,7 +1,5 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
-import { JOBS } from "@/app/data/jobs";
 import { COMPANIES } from "@/app/data/companies";
 import CompanyLogo  from "@/app/components/shared/CompanyLogo";
 import { type Job } from "@/app/data/jobs";

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, ExternalLink, X, Bookmark, MapPin, DollarSign, Clock, ChevronDown, ChevronUp } from "lucide-react";
-import { type Job} from "@/app/data/jobs";
+import React from 'react';
+import { motion } from "framer-motion";
+import { ExternalLink, X, Bookmark, MapPin, DollarSign, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import CompanyLogo from "@/app/components/shared/CompanyLogo";
 import { type JobListing } from "@/types/jobs";
 
@@ -42,7 +41,7 @@ export function ApplySidebar({
 
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className={`h-full bg-red-500  flex flex-col  ${isOverlay ? "" : "bg-white  rounded-[24px] border border-[#EAEAEA] shadow-sm"}`}
+      className={`h-full flex flex-col bg-white ${isOverlay ? "" : "rounded-[24px] border border-[#EAEAEA] shadow-sm"}`}
     >
       <div className={`flex-shrink-0  ${isOverlay ? "p-5 border-b border-gray-100" : "p-6 pb-4 border-b border-[#F5F5F5]"}`}>
         <div className="flex items-center justify-between overflow-y-auto">

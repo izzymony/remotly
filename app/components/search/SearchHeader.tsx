@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { CATEGORIES } from "@/app/data/categories";
 
 export function SearchHeader({
   query,

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Bookmark,
