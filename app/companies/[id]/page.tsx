@@ -12,11 +12,11 @@ export default function CompanyDetailPage() {
 
   if (!company) {
     return (
-      <div className="pt-24 min-h-screen flex items-center justify-center bg-[#FFFFFF]">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-[#111111] mb-2">Company not found</h2>
-          <p className="text-[#6B7280] mb-6">The company profile you are looking for does not exist.</p>
-          <Link href="/companies" className="bg-[#F05A22] text-white px-5 py-2.5 rounded-xl font-semibold">
+      <div className="pt-24 min-h-screen flex items-center justify-center bg-[#FAF9F7]">
+        <div className="text-center px-5">
+          <h2 className="text-2xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>Company not found</h2>
+          <p className="text-[#6E7A6E] mb-6">The company profile you are looking for does not exist.</p>
+          <Link href="/companies" className="bg-[#5A7A6A] hover:bg-[#3D5C4E] text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm transition-colors">
             Back to companies
           </Link>
         </div>

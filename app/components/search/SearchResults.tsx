@@ -1,5 +1,6 @@
-"use client"
-import React, { useState, useMemo } from 'react'
+"use client";
+
+import React, { useState, useMemo } from 'react';
 import { Search as SearchIcon } from "lucide-react";
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Bookmark, MapPin, Clock, DollarSign } from "lucide-react";
@@ -7,7 +8,6 @@ import { ApplySidebar } from "@/app/components/job/ApplySidebar";
 import CompanyLogo from '@/app/components/shared/CompanyLogo';
 import { type JobListing } from '@/types/jobs';
 import { useSavedJobs } from '@/app/components/provider';
-
 
 export function SearchResults({ 
   query = "", 
@@ -71,6 +71,8 @@ export function SearchResults({
     });
   }, [rawListings, remoteOnly, selectedTypes, selectedCategories]);
 
+  const activeJob = selectedJob ?? listings[0] ?? null;
+
   const handleCardClick = (job: JobListing) => {
     setSelectedJob(job);
   };
@@ -81,10 +83,10 @@ export function SearchResults({
 
   if (isLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="animate-pulse w-full bg-gray-100 border border-gray-200 h-[180px] rounded-[20px]" />
+            <div key={i} className="animate-pulse w-full bg-white border border-[#E4EBE6] h-[180px] rounded-2xl" />
           ))}
         </div>
       </div>
@@ -93,46 +95,34 @@ export function SearchResults({
 
   if (isError) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="animate-pulse w-full bg-gray-100 border border-gray-200 h-[180px] rounded-[20px]" />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (listings.length === 0) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="animate-pulse bg-gray-100 border border-gray-200 h-[180px] rounded-[20px]" />
-          ))}
+      <div className="max-w-7xl mx-auto px-5">
+        <div className="p-8 text-center text-red-500 font-medium bg-white border border-[#E4EBE6] rounded-2xl">
+          Failed to load job listings. Please refresh or try again later.
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-5">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-orange-500">Open roles</h2>
-          <p className="mt-1 text-sm text-zinc-600">
+          <h2 className="text-xl font-bold tracking-tight text-[#2C2C2C]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+            Open Roles
+          </h2>
+          <p className="mt-0.5 text-xs font-medium text-[#6E7A6E]">
             {listings.length} {listings.length === 1 ? "role" : "roles"} available
           </p>
         </div>
       </div>
 
       <div className="md:grid md:grid-cols-12 md:gap-8">
-        <div className="md:col-span-5 xl:col-span-4">
+        <div className="md:col-span-5 xl:col-span-4 space-y-4">
           {listings.length === 0 ? (
-            <div className="rounded-[1.25rem] border border-dashed border-zinc-300 bg-white p-10 text-center dark:border-zinc-700 dark:bg-zinc-900">
-              <SearchIcon className="mx-auto h-10 w-10 text-zinc-400" />
-              <h3 className="mt-4 text-lg font-semibold">No roles found</h3>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600">
+            <div className="rounded-2xl border border-dashed border-[#E4EBE6] bg-white p-8 text-center">
+              <SearchIcon className="mx-auto h-8 w-8 text-[#A8A8A8]" />
+              <h3 className="mt-4 text-base font-semibold text-[#2C2C2C]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>No roles found</h3>
+              <p className="mx-auto mt-2 max-w-xs text-xs leading-relaxed text-[#6E7A6E]">
                 Try adjusting your search terms, location, or selected filters to see more opportunities.
               </p>
             </div>
@@ -140,71 +130,77 @@ export function SearchResults({
             <>
               <div className="grid grid-cols-1 gap-4">
                 {listings.map((job: JobListing) => (
-                <div
-                  className={`bg-white rounded-[20px] p-5 border cursor-pointer group transition-all duration-200 hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-100/50 hover:border-orange-200 flex flex-col h-full ${selectedJob?.id === job.id ? 'border-[#F05A22] shadow-md shadow-orange-100' : 'border-[#EAEAEA]'}`}
-                  onClick={() => handleCardClick(job)}
-                  key={job.id}
-                >
-                    <div className="flex items-start justify-between mb-4">
+                  <div
+                    className={`bg-white rounded-2xl p-5 border cursor-pointer group transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-[#5A7A6A]/[0.05] flex flex-col h-full ${
+                      activeJob?.id === job.id
+                        ? 'border-[#5A7A6A] shadow-md shadow-[#5A7A6A]/[0.06] bg-[#FAF9F7]/30'
+                        : 'border-[#E4EBE6]'
+                    }`}
+                    onClick={() => handleCardClick(job)}
+                    key={job.id}
+                  >
+                    <div className="flex items-start justify-between mb-3.5">
                       <div className="flex items-start gap-3">
                         <CompanyLogo
                           companyName={job.company}
                           companyLogoUrl={job.companyLogoUrl}
-                          size={44}
+                          size={40}
                         />
                         <div>
                           <h3
-                            className="font-bold text-[#111111] group-hover:text-[#F05A22] transition-colors text-[16px] leading-tight mb-1"
+                            className="font-bold text-[#2C2C2C] group-hover:text-[#5A7A6A] transition-colors text-[15px] leading-tight mb-0.5"
                             style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
                           >
                             {job.title}
                           </h3>
-                          <p className="text-[#6B7280] text-sm font-medium">{job.company}</p>
+                          <p className="text-[#6E7A6E] text-xs font-semibold">{job.company}</p>
                         </div>
                       </div>
                       {(() => {
                         const jobId = typeof job.id === 'string' ? parseInt(job.id) : job.id;
                         const isSaved = savedJobs.has(jobId);
                         return (
-                           <button
+                          <button
                             onClick={(e) => {
                               e.stopPropagation();
                               if (jobId) toggleSaveJob(jobId);
                             }}
                             aria-label={isSaved ? "Unsave job" : "Save job"}
-                            className="p-2 rounded-xl hover:bg-gray-50 transition-colors flex-shrink-0"
+                            className="p-1.5 rounded-xl hover:bg-[#FAF9F7] text-[#7A7A7A] hover:text-[#5A7A6A] transition-colors flex-shrink-0"
                           >
-                            <Bookmark size={18} className={isSaved ? "text-[#F05A22] fill-[#F05A22]" : "text-[#9CA3AF] group-hover:text-[#6B7280]"} />
+                            <Bookmark
+                              size={16}
+                              className={isSaved ? "text-[#5A7A6A] fill-[#5A7A6A]" : "text-[#7A7A7A] group-hover:text-[#5A7A6A]"}
+                            />
                           </button>
                         );
                       })()}
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      <span className="flex items-center gap-1.5 text-xs text-[#6B7280] bg-gray-50 px-2.5 py-1 rounded-lg">
-                        <MapPin size={12} /> {job.location}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      <span className="flex items-center gap-1 text-[11px] font-medium text-[#6E7A6E] bg-[#FAF9F7] px-2 py-0.5 rounded-md">
+                        <MapPin size={11} className="text-[#7A7A7A]" /> {job.location}
                       </span>
-                      <span className="flex items-center gap-1.5 text-xs text-[#6B7280] bg-gray-50 px-2.5 py-1 rounded-lg">
-                        <DollarSign size={12} /> {job.salary}
-                      </span>
-                      <span className="flex items-center gap-1.5 text-xs text-[#6B7280] bg-gray-50 px-2.5 py-1 rounded-lg">
-                        <Clock size={12} /> {job.postedAt}
+                      <span className="flex items-center gap-1 text-[11px] font-medium text-[#6E7A6E] bg-[#FAF9F7] px-2 py-0.5 rounded-md">
+                        <DollarSign size={11} className="text-[#7A7A7A]" /> {job.salary}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between gap-2 flex-wrap mt-auto pt-2 border-t border-[#F5F5F5]">
+                    <div className="flex items-center justify-between gap-2 flex-wrap mt-auto pt-2 border-t border-[#EEF3EF]">
                       <div className="flex gap-1.5 flex-wrap">
                         <span
-                          className={`px-2.5 py-1 text-[11px] rounded-full font-semibold ${job.remote ? "bg-blue-50 text-blue-600" : "bg-gray-100 text-gray-600"}`}
+                          className={`px-2 py-0.5 text-[10px] rounded-md font-bold uppercase tracking-wider ${
+                            job.remote ? "bg-[#E8F1F5] text-[#5E6EA0]" : "bg-[#FAF9F7] text-[#6E7A6E] border border-[#EEF3EF]"
+                          }`}
                         >
                           {job.employmentType || "Full-time"}
                         </span>
-                        <span className="px-2.5 py-1 text-[11px] rounded-full font-semibold bg-orange-50 text-[#F05A22] capitalize">
+                        <span className="px-2 py-0.5 text-[10px] rounded-md font-bold uppercase tracking-wider bg-[#EBF2EE] text-[#5A7A6A]">
                           {job.provider}
                         </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
                 ))}
               </div>
 
@@ -213,9 +209,9 @@ export function SearchResults({
                   <button
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
-                    className="px-6 py-2.5 bg-orange-500 rounded-full text-white font-medium rounded-xl cursor-pointer shadow-sm"
+                    className="px-6 py-2.5 bg-[#5A7A6A] hover:bg-[#3D5C4E] text-white text-sm font-semibold rounded-xl cursor-pointer shadow-sm shadow-[#5A7A6A]/20 transition-colors"
                   >
-                    {isFetchingNextPage ? 'Loading more...' : 'Load 20 more results'}
+                    {isFetchingNextPage ? 'Loading more...' : 'Load more results'}
                   </button>
                 </div>
               )}
@@ -223,22 +219,22 @@ export function SearchResults({
           )}
         </div>
 
-        <div className="md:block md:col-span-7 xl:col-span-8">
-          {selectedJob ? (
-<div className="sticky top-6 h-[calc(100vh-6rem)] overflow-y-auto">
-               <ApplySidebar
-                job={selectedJob}
-                onApply={() => window.open(selectedJob.url, "_blank")}
+        <div className="md:block md:col-span-7 xl:col-span-8 mt-6 md:mt-0">
+          {activeJob ? (
+            <div className="sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto rounded-2xl border border-[#E4EBE6] bg-white p-1">
+              <ApplySidebar
+                job={activeJob}
+                onApply={() => window.open(activeJob.url, "_blank")}
                 onClose={handleCloseSidebar}
                 variant="inline"
               />
             </div>
           ) : (
-            <div className="rounded-[24px] border border-dashed border-zinc-300 bg-white p-10 text-center dark:border-zinc-700 dark:bg-zinc-900 h-full flex flex-col items-center justify-center">
-              <SearchIcon className="mx-auto h-10 w-10 text-zinc-400" />
-              <h3 className="mt-4 text-lg font-semibold">Select a job</h3>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-zinc-600">
-                Click on any job card to view details and apply
+            <div className="rounded-2xl border border-dashed border-[#E4EBE6] bg-white p-10 text-center h-full flex flex-col items-center justify-center">
+              <SearchIcon className="mx-auto h-8 w-8 text-[#A8A8A8]" />
+              <h3 className="mt-4 text-base font-semibold text-[#2C2C2C]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>No roles selected</h3>
+              <p className="mx-auto mt-2 max-w-xs text-xs leading-relaxed text-[#6E7A6E]">
+                Select a job from the list to view full details and apply.
               </p>
             </div>
           )}
@@ -247,7 +243,7 @@ export function SearchResults({
 
       {selectedJob && (
         <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label="Job details">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleCloseSidebar} />
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={handleCloseSidebar} />
           <div className="absolute inset-y-0 right-0 w-full max-w-lg bg-white shadow-2xl overflow-hidden animate-[slideInRight_0.3s_ease-out]">
             <ApplySidebar
               job={selectedJob}

@@ -23,11 +23,11 @@ export default function JobDetailPage() {
 
   if (!job) {
     return (
-      <div className="pt-24 min-h-screen flex items-center justify-center bg-[#FFFFFF]">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-[#111111] mb-2">Job not found</h2>
-          <p className="text-[#6B7280] mb-6">The job you are looking for does not exist or has been filled.</p>
-          <Link href="/jobs" className="bg-[#F05A22] text-white px-5 py-2.5 rounded-xl font-semibold">
+      <div className="pt-24 min-h-screen flex items-center justify-center bg-[#FAF9F7]">
+        <div className="text-center px-5">
+          <h2 className="text-2xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>Job not found</h2>
+          <p className="text-[#6E7A6E] mb-6">The job you are looking for does not exist or has been filled.</p>
+          <Link href="/jobs" className="bg-[#5A7A6A] hover:bg-[#3D5C4E] text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm transition-colors">
             Back to search
           </Link>
         </div>
@@ -52,19 +52,20 @@ export default function JobDetailPage() {
   };
 
   return (
-    <div className="pt-16 min-h-screen bg-[#FFFFFF]">
-      <div className="bg-white border-b border-[#EAEAEA] px-5 py-3">
-        <div className="max-w-6xl mx-auto flex items-center gap-1.5 text-sm text-[#6B7280]">
-          <Link href="/" className="hover:text-[#F05A22] transition-colors">Home</Link>
+    <div className="pt-16 min-h-screen bg-[#FAF9F7]">
+      {/* Breadcrumbs */}
+      <div className="bg-white border-b border-[#E4EBE6] px-5 py-3">
+        <div className="max-w-6xl mx-auto flex items-center gap-2 text-xs font-semibold text-[#7A7A7A]">
+          <Link href="/" className="hover:text-[#5A7A6A] transition-colors">Home</Link>
           <span>›</span>
-          <Link href="/jobs" className="hover:text-[#F05A22] transition-colors">Jobs</Link>
+          <Link href="/jobs" className="hover:text-[#5A7A6A] transition-colors">Jobs</Link>
           <span>›</span>
-          <span className="text-[#111111] font-medium truncate">{job.title}</span>
+          <span className="text-[#2C2C2C] truncate font-bold">{job.title}</span>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-5 py-8 grid lg:grid-cols-[1fr_440px] gap-7">
-        <article className="space-y-5">
+      <div className="max-w-6xl mx-auto px-5 py-8 grid lg:grid-cols-[1fr_420px] gap-7">
+        <article className="space-y-6">
           <JobHeader
             job={job}
             company={company}
@@ -72,15 +73,17 @@ export default function JobDetailPage() {
             onSave={() => toggleSaveJob(job.id)}
           />
           <JobOverview job={job} />
+          
           <div className="grid md:grid-cols-2 gap-5">
-            <div className="bg-white rounded-[24px] border border-[#EAEAEA] p-6">
-              <h2 className="font-bold text-[#111111] mb-4" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+            {/* Responsibilities */}
+            <div className="bg-white rounded-3xl border border-[#E4EBE6] p-6 shadow-sm shadow-black/[0.01]">
+              <h2 className="font-bold text-[#2C2C2C] mb-4 text-[15px]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
                 Responsibilities
               </h2>
               <ul className="space-y-3">
                 {job.responsibilities.map((r) => (
-                  <li key={r} className="flex items-start gap-2.5 text-sm text-[#6B7280]">
-                    <span className="text-[#22C55E] mt-0.5">✓</span>
+                  <li key={r} className="flex items-start gap-2.5 text-sm text-[#6E7A6E] font-medium leading-relaxed">
+                    <span className="text-[#5A7A6A] mt-0.5 font-bold">✓</span>
                     {r}
                   </li>
                 ))}
@@ -88,23 +91,25 @@ export default function JobDetailPage() {
             </div>
             <JobRequirements job={job} />
           </div>
-          <div className="bg-white rounded-[24px] border border-[#EAEAEA] p-7">
-            <h2 className="font-bold text-[#111111] mb-5" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
-              Benefits & perks
+
+          {/* Benefits & Perks */}
+          <div className="bg-white rounded-3xl border border-[#E4EBE6] p-7 shadow-sm shadow-black/[0.01]">
+            <h2 className="font-bold text-[#2C2C2C] mb-5 text-[15px]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+              Benefits & Perks
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {job.benefits.map((b) => (
-                <div key={b} className="flex items-center gap-2 bg-[#FFFFFF] rounded-xl p-3 border border-[#EAEAEA]">
-                  <span className="text-[#F05A22]">★</span>
-                  <span className="text-sm text-[#111111]">{b}</span>
+                <div key={b} className="flex items-center gap-2 bg-[#FAF9F7] rounded-xl p-3 border border-[#E4EBE6] hover:border-[#5A7A6A]/20 transition-all">
+                  <span className="text-[#5A7A6A] text-xs">★</span>
+                  <span className="text-xs font-semibold text-[#2C2C2C]">{b}</span>
                 </div>
               ))}
             </div>
           </div>
         </article>
 
-        <aside>
-          <div className="sticky top-24 h-[calc(100vh-7rem)] flex flex-col">
+        <aside className="space-y-6">
+          <div className="sticky top-24 h-[calc(100vh-8rem)] flex flex-col">
             <ApplySidebar
               job={jobListing}
               applied={applied}

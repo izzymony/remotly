@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { ArrowUpRight, Building2, MapPin, Briefcase } from "lucide-react";
+import { ArrowUpRight, Building2, MapPin, Briefcase, Star } from "lucide-react";
 import Link from "next/link";
 
 interface CompanyCardProps {
@@ -33,18 +33,32 @@ export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
 
   if (!passedCompanies && isLoading) return (
     <div className="flex h-48 w-full items-center justify-center">
-      <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#F05A22] border-t-transparent" />
+      <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#5A7A6A] border-t-transparent" />
     </div>
   );
   if (!passedCompanies && error) return <div className="p-4 text-sm text-red-500">Error loading companies</div>;
 
   const data = passedCompanies ?? fetchedData;
 
+  // Generate deterministic rating & reviews count for companies
+  const getMockRating = (name: string) => {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const score = 4.0 + (Math.abs(hash) % 10) / 10;
+    const reviews = 12 + (Math.abs(hash) % 180);
+    return { score: score.toFixed(1), reviews };
+  };
+
   return (
-    <div className="grid px-8 mt-6 gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid px-0 mt-6 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {data?.map((company: Record<string, unknown>, index: number) => {
         const companyId = String(company.company_id || company.id || company.name || `company-${index}`);
         const isFollowing = Boolean(followed[companyId]);
+        const companyName = String(company.name ?? "");
+        const ratingInfo = getMockRating(companyName);
+
         const logoValue = typeof company.logo_url === "string"
           ? company.logo_url
           : typeof company.logo === "string"
@@ -68,25 +82,28 @@ export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -4 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="group relative flex flex-col justify-between overflow-hidden rounded-[24px] border border-gray-100 bg-white p-6 shadow-sm transition-all hover:border-orange-200/60 hover:shadow-xl hover:shadow-orange-500/5"
+            className="group relative flex flex-col justify-between overflow-hidden rounded-[20px] border border-[#E4EBE6] bg-white p-6 shadow-sm shadow-black/[0.01] transition-all hover:border-[#5A7A6A]/30 hover:shadow-lg hover:shadow-[#5A7A6A]/[0.06]"
             key={companyId}
           >
-            {/* Subtle background gradient on hover */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-50/0 to-orange-50/0 transition-colors duration-500 group-hover:from-orange-50/50 group-hover:to-transparent" />
+            {/* Soft background hover gradient */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#EBF2EE]/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
             <div className="relative z-10 flex items-start justify-between">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 shadow-sm">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#EEF3EF] bg-[#FAF9F7] shadow-sm">
                 {hasValidImageUrl ? (
                   <Image
                     src={logoValue}
-                    alt={String(company.name || "Company logo")}
-                    width={56}
-                    height={56}
+                    alt={companyName}
+                    width={48}
+                    height={48}
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F05A22] to-orange-400 text-lg font-bold text-white" style={{ backgroundColor: typeof company.logo === 'string' && company.logo.startsWith('#') ? company.logo : undefined }}>
-                    {String(company.name || "C").charAt(0).toUpperCase()}
+                  <div
+                    className="flex h-full w-full items-center justify-center text-sm font-bold text-white"
+                    style={{ backgroundColor: typeof company.logo === 'string' && company.logo.startsWith('#') ? company.logo : '#5A7A6A' }}
+                  >
+                    {companyName.charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
@@ -97,52 +114,64 @@ export function CompanyCard({ companies: passedCompanies }: CompanyCardProps) {
                   e.stopPropagation();
                   setFollowed((current) => ({ ...current, [companyId]: !current[companyId] }));
                 }}
-                className="flex h-8 items-center justify-center rounded-full px-4 text-xs font-semibold tracking-wide transition-all duration-300 border border-gray-200 bg-white text-gray-700 hover:border-[#F05A22] hover:bg-orange-50 hover:text-[#F05A22]"
+                className={`flex h-8 items-center justify-center rounded-xl px-4 text-xs font-semibold transition-all duration-200 border ${
+                  isFollowing
+                    ? "bg-[#5A7A6A] text-white border-[#5A7A6A] hover:bg-[#3D5C4E] hover:border-[#3D5C4E]"
+                    : "border-[#E4EBE6] bg-white text-[#4A4A4A] hover:border-[#5A7A6A] hover:bg-[#F4F8F5] hover:text-[#5A7A6A]"
+                }`}
               >
                 {isFollowing ? "Following" : "Follow"}
               </button>
             </div>
 
             <div className="relative z-10 mt-5">
-              <Link href={`/companies/${companyId}`} className="block">
-                <h3 className="mb-1 text-lg font-bold tracking-tight text-gray-900 transition-colors group-hover:text-[#F05A22]">
-                  {String(company.name ?? "")}
-                </h3>
-              </Link>
-              <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">
+              <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                <Link href={`/companies/${companyId}`} className="block">
+                  <h3 className="text-[17px] font-bold tracking-tight text-[#2C2C2C] transition-colors group-hover:text-[#5A7A6A]">
+                    {companyName}
+                  </h3>
+                </Link>
+                {/* Sage Green Star Rating badge */}
+                <div className="flex items-center gap-1 bg-[#EBF2EE] text-[#5A7A6A] px-2 py-0.5 rounded-lg text-xs font-semibold">
+                  <Star size={11} className="fill-[#5A7A6A] text-[#5A7A6A]" />
+                  <span>{ratingInfo.score}</span>
+                  <span className="text-[10px] text-[#6E7A6E] font-medium font-mono">({ratingInfo.reviews})</span>
+                </div>
+              </div>
+              <p className="line-clamp-2 text-sm leading-relaxed text-[#6E7A6E]">
                 {String(company.description || company.tagline || "Explore opportunities with this team and discover what it's like to work here.")}
               </p>
             </div>
 
-            <div className="relative z-10 mt-5 flex flex-wrap items-center gap-2">
+            <div className="relative z-10 mt-4.5 flex flex-wrap items-center gap-2">
               {company.industry ? (
-                <span className="flex items-center gap-1.5 rounded-full border border-gray-100 bg-gray-50 px-2.5 py-1 text-[11px] font-medium text-gray-600">
-                  <Briefcase size={12} className="text-gray-400" />
+                <span className="flex items-center gap-1.5 rounded-lg border border-[#EEF3EF] bg-[#FAF9F7] px-2.5 py-1 text-[11px] font-medium text-[#6E7A6E]">
+                  <Briefcase size={12} className="text-[#7A7A7A]" />
                   {String(company.industry)}
                 </span>
               ) : null}
               {company.location ? (
-                <span className="flex items-center gap-1.5 rounded-full border border-gray-100 bg-gray-50 px-2.5 py-1 text-[11px] font-medium text-gray-600">
-                  <MapPin size={12} className="text-gray-400" />
+                <span className="flex items-center gap-1.5 rounded-lg border border-[#EEF3EF] bg-[#FAF9F7] px-2.5 py-1 text-[11px] font-medium text-[#6E7A6E]">
+                  <MapPin size={12} className="text-[#7A7A7A]" />
                   {String(company.location)}
                 </span>
               ) : null}
             </div>
 
-            <div className="relative z-10 mt-6 flex items-center justify-between border-t border-gray-100 pt-4 transition-colors group-hover:border-orange-100">
+            <div className="relative z-10 mt-5 flex items-center justify-between border-t border-[#EEF3EF] pt-3.5 transition-colors group-hover:border-[#5A7A6A]/10">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-50 text-[#F05A22]">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EBF2EE] text-[#5A7A6A]">
                   <Building2 size={13} strokeWidth={2.5} />
                 </div>
-                <span className="text-sm font-semibold text-gray-700">
-                  <span className="text-[#F05A22]">{String(company.job_count ?? company.openJobs ?? 0)}</span> open roles
+                <span className="text-sm font-semibold text-[#4A4A4A]">
+                  <span className="text-[#5A7A6A]">{String(company.job_count ?? company.openJobs ?? 0)}</span> open roles
                 </span>
               </div>
               <Link
                 href={`/companies/${companyId}`}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-400 transition-all hover:bg-[#F05A22] hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#FAF9F7] text-[#7A7A7A] transition-all hover:bg-[#5A7A6A] hover:text-white"
               >
-                <ArrowUpRight size={16} strokeWidth={2.5} />
+                <ArrowUpRight size={15} strokeWidth={2.5} />
               </Link>
             </div>
           </motion.div>

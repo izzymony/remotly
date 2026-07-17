@@ -38,7 +38,7 @@ function JobsContent() {
   };
 
   return (
-    <div className="pt-16 min-h-screen bg-[#FFFFFF]">
+    <div className="pt-16 min-h-screen bg-[#FAF9F7]">
       <SearchHeader
         query={query}
         setQuery={setQuery}

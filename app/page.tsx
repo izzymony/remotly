@@ -11,7 +11,7 @@ import { Footer } from "@/app/components/landing/Footer";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#FFFFFF] pt-16" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="min-h-screen bg-[#FAF9F7] pt-16" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <Hero />
       <Categories />
       <FeaturedJobs />

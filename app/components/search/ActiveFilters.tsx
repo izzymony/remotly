@@ -42,16 +42,16 @@ export function ActiveFilters({
   if (activeFilterCount === 0) return null;
 
   return (
-    <div className="max-w-7xl mx-auto mt-2.5 flex flex-wrap gap-2 items-center">
+    <div className="max-w-7xl mx-auto px-5 mt-3.5 flex flex-wrap gap-2 items-center">
       {remoteOnly && (
-        <span className="flex items-center gap-1 px-3 py-1 bg-[#FFF3EE] text-[#F05A22] text-xs rounded-full font-medium">
+        <span className="flex items-center gap-1.5 px-3 py-1 bg-[#EBF2EE] text-[#5A7A6A] border border-[#5A7A6A]/10 text-xs rounded-lg font-semibold shadow-sm shadow-[#5A7A6A]/5">
           Remote only
-           <button
+          <button
             onClick={() => setRemoteOnly(false)}
             aria-label="Remove Remote only filter"
-            className="ml-1"
+            className="text-[#6E7A6E] hover:text-[#5A7A6A] transition-colors"
           >
-            <X size={9} />
+            <X size={10} strokeWidth={2.5} />
           </button>
         </span>
       )}
@@ -59,31 +59,31 @@ export function ActiveFilters({
         (f) => (
           <span
             key={f}
-            className="flex items-center gap-1 px-3 py-1 bg-[#FFF3EE] text-[#F05A22] text-xs rounded-full font-medium"
+            className="flex items-center gap-1.5 px-3 py-1 bg-[#EBF2EE] text-[#5A7A6A] border border-[#5A7A6A]/10 text-xs rounded-lg font-semibold shadow-sm shadow-[#5A7A6A]/5"
           >
             {f}
-               <button
-                 onClick={() => {
-                   if (selectedTypes.includes(f))
-                     toggleFilter(selectedTypes, setSelectedTypes, f);
-                   if (selectedLevels.includes(f))
-                     toggleFilter(selectedLevels, setSelectedLevels, f);
-                   if (selectedCategories.includes(f))
-                     toggleFilter(selectedCategories, setSelectedCategories, f);
-                 }}
-                 aria-label={`Remove ${f} filter`}
-                 className="ml-1"
-               >
-              <X size={9} />
+            <button
+              onClick={() => {
+                if (selectedTypes.includes(f))
+                  toggleFilter(selectedTypes, setSelectedTypes, f);
+                if (selectedLevels.includes(f))
+                  toggleFilter(selectedLevels, setSelectedLevels, f);
+                if (selectedCategories.includes(f))
+                  toggleFilter(selectedCategories, setSelectedCategories, f);
+              }}
+              aria-label={`Remove ${f} filter`}
+              className="text-[#6E7A6E] hover:text-[#5A7A6A] transition-colors"
+            >
+              <X size={10} strokeWidth={2.5} />
             </button>
           </span>
         )
       )}
       <button
         onClick={clearAllFilters}
-        className="text-xs text-[#6B7280] hover:text-[#111111] underline underline-offset-2"
+        className="text-xs text-[#7A7A7A] hover:text-[#2C2C2C] font-medium underline underline-offset-4 decoration-[#E4EBE6] hover:decoration-[#5A7A6A] transition-colors ml-1.5"
       >
-        Clear all
+        Clear all filters
       </button>
     </div>
   );
