@@ -20,30 +20,40 @@
 
 /* ─── Design Tokens ─────────────────────────────────── */
 :root {
-  /* Palette */
-  --cream:        #FAF9F7;
+  /* Palette - NextHire Modern Theme */
+  --background:   #FFFFFF;
   --card:         #FFFFFF;
-  --charcoal:     #2C2C2C;
-  --charcoal-80:  #4A4A4A;
-  --charcoal-50:  #7A7A7A;
-  --charcoal-30:  #A8A8A8;
-  --sage:         #5A7A6A;
-  --sage-dark:    #3D5C4E;
-  --sage-mid:     #6B9E7E;
-  --sage-light:   #EBF2EE;
-  --sage-xlight:  #F4F8F5;
-  --border:       #E4EBE6;
-  --border-light: #EEF3EF;
-
+  --charcoal:     #1F2937;
+  --charcoal-80:  #374151;
+  --charcoal-50:  #6B7280;
+  --charcoal-30:  #9CA3AF;
+  
+  /* Primary Purple Accent */
+  --purple:       #7C3AED;
+  --purple-dark:  #6D28D9;
+  --purple-light: #EDE9FE;
+  --purple-xlight: #F5F3FF;
+  
+  /* Secondary Colors */
+  --blue:         #3B82F6;
+  --emerald:      #10B981;
+  --amber:        #F59E0B;
+  --red:          #EF4444;
+  
+  /* Neutrals */
+  --border:       #E5E7EB;
+  --border-light: #F3F4F6;
+  --gray-text:    #6B7280;
+  
   /* Legacy compat */
-  --background:   var(--cream);
   --foreground:   var(--charcoal);
 }
 
 @theme inline {
-  --color-background: var(--cream);
+  --color-background: var(--background);
   --color-foreground:  var(--charcoal);
-  --color-brand:       var(--sage);
+  --color-brand:       var(--purple);
+  --color-accent:      var(--purple);
   --font-sans:         var(--font-geist-sans);
   --font-mono:         var(--font-geist-mono);
 }
@@ -54,7 +64,7 @@ html {
 }
 
 body {
-  background-color: var(--cream);
+  background-color: var(--background);
   color: var(--charcoal);
   font-family: 'Inter', 'DM Sans', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -62,22 +72,25 @@ body {
 
 /* ─── Scrollbar ─────────────────────────────────────── */
 ::-webkit-scrollbar              { width: 6px; height: 6px; }
-::-webkit-scrollbar-track        { background: var(--cream); }
+::-webkit-scrollbar-track        { background: var(--background); }
 ::-webkit-scrollbar-thumb        { background: var(--border); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover  { background: var(--sage-mid); }
+::-webkit-scrollbar-thumb:hover  { background: var(--purple); }
 
 /* ─── Utility helpers ───────────────────────────────── */
 .fade-up   { animation: fadeUp 0.45s cubic-bezier(0.16,1,0.3,1) both; }
 .card-base {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 16px;
 }
-.sage-badge {
-  background: var(--sage-light);
-  color: var(--sage-dark);
+.purple-badge {
+  background: var(--purple-light);
+  color: var(--purple-dark);
   font-weight: 600;
   border-radius: 99px;
-  padding: 2px 10px;
-  font-size: 11px;
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.accent-border {
+  border-left: 4px solid var(--purple);
 }
