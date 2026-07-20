@@ -27,40 +27,38 @@ export function Categories() {
   const router = useRouter();
 
   return (
-    <section className="bg-[#FAF9F7] py-20 px-5">
+    <section className="bg-white py-20 px-5">
       <div className="max-w-6xl mx-auto">
         <div className="mb-10">
-          <span className="inline-block text-xs font-semibold tracking-widest text-[#5A7A6A] uppercase mb-3">
+          <span className="inline-block text-xs font-semibold tracking-widest text-purple uppercase mb-3">
             Browse by category
           </span>
           <h2
-            className="text-3xl font-bold text-[#2C2C2C] mb-2"
+            className="text-3xl font-bold text-charcoal mb-2"
             style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
           >
             Find what excites you
           </h2>
-          <p className="text-[#6E7A6E]">Explore opportunities in the field you love most.</p>
+          <p className="text-charcoal-50">Explore opportunities in the field you love most.</p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {CATEGORIES.map((cat) => {
-            const colors = SAGE_COLORS[cat.name] ?? { icon: "#5A7A6A", bg: "#EBF2EE" };
             return (
               <button
                 key={cat.name}
                 onClick={() => router.push(`/jobs?category=${encodeURIComponent(cat.name)}`)}
-                className="group bg-white hover:bg-[#F4F8F5] border border-[#E4EBE6] hover:border-[#5A7A6A]/30 rounded-2xl p-5 text-left transition-all duration-200 hover:shadow-lg hover:shadow-[#5A7A6A]/[0.08] hover:-translate-y-0.5"
+                className="group bg-white hover:bg-purple-xlight border border-border hover:border-purple/30 rounded-xl p-5 text-left transition-all duration-200 hover:shadow-lg hover:shadow-purple/[0.08] hover:-translate-y-0.5"
               >
                 <div
-                  className="w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-transform duration-200 group-hover:scale-110"
-                  style={{ backgroundColor: colors.bg, color: colors.icon }}
+                  className="w-10 h-10 rounded-lg mb-3 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 bg-purple-light text-purple"
                 >
                   {ICON_MAP[cat.name]}
                 </div>
-                <p className="font-semibold text-[#2C2C2C] text-sm mb-0.5 group-hover:text-[#5A7A6A] transition-colors">
+                <p className="font-semibold text-charcoal text-sm mb-0.5 group-hover:text-purple transition-colors">
                   {cat.name}
                 </p>
-                <p className="text-xs text-[#7A7A7A]">{cat.count.toLocaleString()} roles</p>
+                <p className="text-xs text-charcoal-50">{cat.count.toLocaleString()} roles</p>
               </button>
             );
           })}

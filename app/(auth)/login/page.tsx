@@ -41,13 +41,13 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#FAF9F7] flex items-center justify-center p-5"
+      className="min-h-screen bg-white flex items-center justify-center p-5"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       {/* Ambient blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-15%] right-[-10%] w-[700px] h-[700px] rounded-full bg-[#5A7A6A]/[0.05] blur-3xl" />
-        <div className="absolute bottom-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[#6B9E7E]/[0.04] blur-3xl" />
+        <div className="absolute top-[-15%] right-[-10%] w-[700px] h-[700px] rounded-full bg-purple/[0.04] blur-3xl" />
+        <div className="absolute bottom-[-15%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue/[0.03] blur-3xl" />
       </div>
 
       <motion.div
@@ -57,14 +57,14 @@ export default function LoginPage() {
         className="relative w-full max-w-md"
       >
         {/* Card */}
-        <div className="bg-white rounded-3xl border border-[#E4EBE6] shadow-xl shadow-black/[0.02] p-8 md:p-10">
+        <div className="bg-white rounded-2xl border border-border shadow-lg shadow-black/[0.05] p-8 md:p-10">
           {/* Logo */}
           <div className="flex items-center gap-2.5 mb-8">
-            <div className="w-8 h-8 rounded-[10px] bg-[#5A7A6A] flex items-center justify-center shadow-sm shadow-[#5A7A6A]/20">
+            <div className="w-8 h-8 rounded-[10px] bg-purple flex items-center justify-center shadow-sm shadow-purple/20">
               <Sparkles size={14} className="text-white" />
             </div>
             <span
-              className="font-bold text-[17px] text-[#2C2C2C] tracking-tight"
+              className="font-bold text-[17px] text-charcoal tracking-tight"
               style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
             >
               TalentFlow
@@ -74,12 +74,12 @@ export default function LoginPage() {
           {/* Heading */}
           <div className="mb-8">
             <h1
-              className="text-[26px] font-bold text-[#2C2C2C] leading-tight mb-1.5"
+              className="text-[26px] font-bold text-charcoal leading-tight mb-1.5"
               style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
             >
               Welcome back
             </h1>
-            <p className="text-[#6E7A6E] text-sm leading-relaxed font-medium">
+            <p className="text-charcoal-50 text-sm leading-relaxed font-medium">
               Sign in to continue discovering your next opportunity.
             </p>
           </div>
@@ -100,13 +100,13 @@ export default function LoginPage() {
           <form id="login-form" onSubmit={handleSubmit} noValidate className="space-y-4">
             {/* Email */}
             <div className="space-y-1.5">
-              <label htmlFor="login-email" className="block text-xs font-semibold text-[#4A4A4A]">
+              <label htmlFor="login-email" className="block text-xs font-semibold text-charcoal">
                 Email address
               </label>
               <div className="relative">
                 <Mail
                   size={14}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A8A8A8] pointer-events-none"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-charcoal-30 pointer-events-none"
                 />
                 <input
                   id="login-email"
@@ -116,7 +116,7 @@ export default function LoginPage() {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#E4EBE6] bg-[#FAF9F7] text-[#2C2C2C] placeholder-[#A8A8A8] text-sm focus:outline-none focus:ring-2 focus:ring-[#5A7A6A]/20 focus:border-[#5A7A6A] focus:bg-white transition-all"
+                  className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-border bg-border-light text-charcoal placeholder-charcoal-30 text-sm focus:outline-none focus:ring-2 focus:ring-purple/20 focus:border-purple focus:bg-white transition-all"
                 />
               </div>
             </div>
@@ -124,12 +124,12 @@ export default function LoginPage() {
             {/* Password */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label htmlFor="login-password" className="block text-xs font-semibold text-[#4A4A4A]">
+                <label htmlFor="login-password" className="block text-xs font-semibold text-charcoal">
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-[#5A7A6A] font-semibold hover:underline"
+                  className="text-xs text-purple font-semibold hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -137,7 +137,7 @@ export default function LoginPage() {
               <div className="relative">
                 <Lock
                   size={14}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A8A8A8] pointer-events-none"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-charcoal-30 pointer-events-none"
                 />
                 <input
                   id="login-password"
@@ -147,13 +147,13 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-10 py-2.5 rounded-xl border border-[#E4EBE6] bg-[#FAF9F7] text-[#2C2C2C] placeholder-[#A8A8A8] text-sm focus:outline-none focus:ring-2 focus:ring-[#5A7A6A]/20 focus:border-[#5A7A6A] focus:bg-white transition-all"
+                  className="w-full pl-9 pr-10 py-2.5 rounded-lg border border-border bg-border-light text-charcoal placeholder-charcoal-30 text-sm focus:outline-none focus:ring-2 focus:ring-purple/20 focus:border-purple focus:bg-white transition-all"
                 />
                 <button
                   type="button"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A8A8A8] hover:text-[#6E7A6E] transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-charcoal-30 hover:text-charcoal-50 transition-colors"
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
@@ -165,7 +165,7 @@ export default function LoginPage() {
               id="login-submit"
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-[#5A7A6A] hover:bg-[#3D5C4E] text-white font-semibold text-sm transition-all duration-200 shadow-sm shadow-[#5A7A6A]/25 hover:shadow-md hover:shadow-[#5A7A6A]/30 hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-2"
+              className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg bg-purple hover:bg-purple-dark text-white font-semibold text-sm transition-all duration-200 shadow-sm shadow-purple/25 hover:shadow-md hover:shadow-purple/30 hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-2"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -183,16 +183,16 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-[#EEF3EF]" />
-            <span className="text-xs text-[#A8A8A8] font-medium font-mono">or</span>
-            <div className="flex-1 h-px bg-[#EEF3EF]" />
+            <div className="flex-1 h-px bg-border-light" />
+            <span className="text-xs text-charcoal-30 font-medium font-mono">or</span>
+            <div className="flex-1 h-px bg-border-light" />
           </div>
 
           {/* Google OAuth */}
           <button
             id="login-google"
             type="button"
-            className="w-full flex items-center justify-center gap-3 py-2.5 px-6 rounded-xl border border-[#E4EBE6] bg-white hover:bg-[#FAF9F7] text-[#4A4A4A] font-semibold text-sm transition-all duration-200 hover:border-[#5A7A6A]/30 hover:shadow-sm"
+            className="w-full flex items-center justify-center gap-3 py-2.5 px-6 rounded-lg border border-border bg-white hover:bg-border-light text-charcoal font-semibold text-sm transition-all duration-200 hover:border-purple/30 hover:shadow-sm"
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4814h4.8436c-.2086 1.125-.8427 2.0782-1.7959 2.7164v2.2581h2.9087C16.6582 14.0127 17.64 11.8059 17.64 9.2045z" fill="#4285F4"/>
@@ -204,20 +204,20 @@ export default function LoginPage() {
           </button>
 
           {/* Sign-up link */}
-          <p className="text-center text-sm text-[#6E7A6E] mt-6 font-medium">
+          <p className="text-center text-sm text-charcoal-50 mt-6 font-medium">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-[#5A7A6A] font-semibold hover:underline">
+            <Link href="/signup" className="text-purple font-semibold hover:underline">
               Sign up free
             </Link>
           </p>
         </div>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-[#7A7A7A] mt-5">
+        <p className="text-center text-xs text-charcoal-30 mt-5">
           By signing in, you agree to our{" "}
-          <Link href="/terms" className="underline hover:text-[#6E7A6E]">Terms</Link>
+          <Link href="/terms" className="underline hover:text-charcoal-50">Terms</Link>
           {" "}and{" "}
-          <Link href="/privacy" className="underline hover:text-[#6E7A6E]">Privacy Policy</Link>.
+          <Link href="/privacy" className="underline hover:text-charcoal-50">Privacy Policy</Link>.
         </p>
       </motion.div>
     </div>

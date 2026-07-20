@@ -29,20 +29,20 @@ export function FeaturedJobs() {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-end justify-between mb-10">
           <div>
-            <span className="inline-block text-xs font-semibold tracking-widest text-[#5A7A6A] uppercase mb-3">
+            <span className="inline-block text-xs font-semibold tracking-widest text-purple uppercase mb-3">
               Featured jobs
             </span>
             <h2
-              className="text-3xl font-bold text-[#2C2C2C] mb-1.5"
+              className="text-3xl font-bold text-charcoal mb-1.5"
               style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}
             >
               Handpicked for you
             </h2>
-            <p className="text-[#6E7A6E]">Top roles from our partner companies.</p>
+            <p className="text-charcoal-50">Top roles from our partner companies.</p>
           </div>
           <Link
             href="/jobs"
-            className="hidden md:flex items-center gap-2 text-sm font-semibold text-[#5A7A6A] hover:text-[#3D5C4E] transition-colors group"
+            className="hidden md:flex items-center gap-2 text-sm font-semibold text-purple hover:text-purple-dark transition-colors group"
           >
             View all jobs
             <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
